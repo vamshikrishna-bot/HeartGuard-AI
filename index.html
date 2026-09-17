@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HeartGuard AI educational heart risk assessment">
+  <title>HeartGuard AI | Heart Risk Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .sidebar { position: sticky; top: 0; height: 100vh; }
+    .header-meta { text-align: right; }
+    .meta-note { display: block; margin-top: 12px; color: #8a9695; font: 600 .67rem 'Space Grotesk', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+    .progress-rail { display: flex; align-items: center; position: relative; margin: 0 0 25px; padding: 0 10px; }
+    .progress-rail:before { content: ''; position: absolute; left: 25px; right: 25px; top: 14px; height: 1px; background: #d8ded8; }
+    .progress-fill { position: absolute; left: 25px; top: 14px; width: 8%; height: 2px; background: #e9785d; z-index: 1; }
+    .progress-step { display: flex; align-items: center; gap: 9px; position: relative; z-index: 2; flex: 1; color: #8a9695; font-size: .72rem; font-weight: 600; }
+    .progress-step:not(:first-of-type) { justify-content: center; }
+    .progress-step:last-of-type { justify-content: flex-end; }
+    .progress-step b { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 50%; background: #f4f1eb; border: 1px solid #d8ded8; font: 600 .68rem 'Space Grotesk', sans-serif; }
+    .progress-step.active { color: #075754; }
+    .progress-step.active b { background: #e9785d; border-color: #e9785d; color: #fff; }
+    .panel { transition: border-color .2s, box-shadow .2s; }
+    .panel:hover { border-color: #b9cec5; box-shadow: 0 22px 60px rgba(30,53,51,.12); }
+    .side-notes { position: relative; }
+    .side-notes::before { content: ''; position: absolute; left: 4px; top: 28px; bottom: 28px; width: 1px; background: rgba(247,212,154,.55); }
+    .side-note { position: relative; z-index: 1; }
+    .sidebar { overflow-y: auto; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(247,212,154,.62) rgba(255,255,255,.08); }
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,.07); }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(247,212,154,.62); border-radius: 999px; border: 1px solid rgba(7,87,84,.85); }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: #f7d49a; }
+    .disclaimer { position: static; margin: 30px 0 8px; }
+    @media (max-width: 800px) {
+      .sidebar { position: relative; height: auto; }
+      .side-notes { margin-bottom: 28px; }
+      .side-note { min-height: 70px; padding-left: 0; }
+      .side-note span { min-width: 28px; background: #075754; }
+      .disclaimer { position: static; margin: 0; }
+      .header-meta { text-align: left; }
+      .meta-note { display: inline-block; margin: 0 0 0 10px; }
+      .progress-step { display: block; text-align: center; }
+      .progress-step:not(:first-of-type), .progress-step:last-of-type { justify-content: center; }
+      .progress-step span { display: block; margin-top: 7px; font-size: .65rem; }
+    }
+  </style>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="side-brand"><span class="heart-mark">+</span><div><strong>HeartGuard AI</strong><small>VK-powered screening</small></div></div>
+      <div class="side-intro"><span class="eyebrow">A clearer first look</span><h2>Listen to the pattern, then talk to a clinician.</h2><p>A focused screening companion for common cardiovascular measurements.</p></div>
+      <div class="side-notes"><div class="side-note"><span>01</span><p>Complete the profile and measurements.</p></div><div class="side-note"><span>02</span><p>The trained KNN model evaluates the inputs.</p></div><div class="side-note"><span>03</span><p>Use the signal as a conversation starter, never as a diagnosis.</p></div></div>
+      <div class="disclaimer"><b>Medical disclaimer</b><p>Educational screening only. Always discuss health concerns with a qualified doctor.</p></div>
+    </aside>
+
+    <main class="content">
+      <header class="page-header"><div><span class="eyebrow">Clinical intake / 01</span><h1>Heart risk assessment</h1><p>Enter the available patient information for a quick, model-assisted screening signal.</p></div><div class="header-meta"><div class="status"><i></i> Model online</div><span class="meta-note">KNN / v1.0</span></div></header>
+      <div class="progress-rail" aria-label="Assessment progress"><div class="progress-fill"></div><div class="progress-step active"><b>01</b><span>Profile</span></div><div class="progress-step"><b>02</b><span>Measurements</span></div><div class="progress-step"><b>03</b><span>ECG &amp; exercise</span></div></div>
+      <form id="assessment-form">
+        <section class="panel profile-panel"><div class="section-heading"><span class="section-number">01</span><div><h2>Patient profile</h2><p>Demographics used to establish the assessment profile.</p></div></div><div class="form-grid two-cols">
+          <label>Age <span class="value" id="age-value">40 years</span><input id="age" name="age" type="range" min="18" max="100" value="40"><span class="range-labels"><small>18</small><small>100</small></span></label>
+          <label>Sex<select name="sex"><option value="M">Male</option><option value="F">Female</option></select></label>
+        </div></section>
+
+        <section class="panel"><div class="section-heading"><span class="section-number">02</span><div><h2>Heart measurements</h2><p>Resting vitals, blood chemistry, and exercise capacity.</p></div></div><div class="form-grid three-cols">
+          <label>Resting blood pressure <small class="unit">mm Hg</small><input name="resting_bp" type="number" min="80" max="200" value="120" required></label>
+          <label>Cholesterol <small class="unit">mg/dl</small><input name="cholesterol" type="number" min="100" max="600" value="200" required></label>
+          <label>Fasting blood sugar <small class="unit">above 120 mg/dl</small><select name="fasting_bs"><option value="0">No</option><option value="1">Yes</option></select></label>
+          <label>Maximum heart rate <span class="value" id="max-rate-value">150 bpm</span><input id="max-rate" name="max_heart_rate" type="range" min="60" max="220" value="150"><span class="range-labels"><small>60</small><small>220</small></span></label>
+          <label>Oldpeak <small class="unit">ST depression</small><input name="oldpeak" type="number" min="0" max="10" step="0.1" value="1" required></label>
+        </div></section>
+
+        <section class="panel"><div class="section-heading"><span class="section-number">03</span><div><h2>ECG &amp; exercise</h2><p>Symptoms, rhythm observations, and response to exertion.</p></div></div><div class="form-grid two-cols">
+          <label>Chest pain type<select name="chest_pain"><option value="ATA">Atypical angina</option><option value="NAP">Non-anginal pain</option><option value="ASY">Asymptomatic</option><option value="TA">Typical angina</option></select></label>
+          <label>Resting ECG<select name="resting_ecg"><option value="Normal">Normal</option><option value="ST">ST-T abnormality</option><option value="LVH">Left ventricular hypertrophy</option></select></label>
+          <label>Exercise-induced angina<select name="exercise_angina"><option value="N">No</option><option value="Y">Yes</option></select></label>
+          <label>ST slope<select name="st_slope"><option value="Up">Up</option><option value="Flat">Flat</option><option value="Down">Down</option></select></label>
+        </div></section>
+
+        <div class="action-row"><p>Results are generated from the saved KNN model and should be reviewed with a professional.</p><button type="submit"><span>Analyze heart risk</span><b>→</b></button></div>
+      </form>
+      <section id="result" class="result" aria-live="polite" hidden></section>
+      <footer>HeartGuard AI <span>•</span> Educational use only <span>•</span> Not a medical diagnosis</footer>
+    </main>
+  </div>
+</body>
+</html>
